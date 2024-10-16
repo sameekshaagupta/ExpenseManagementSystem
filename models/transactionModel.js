@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const transactionSchema  = new mongoose.Schema({
     amount:{
-        type:number,
+        type:Number,
         required:[true, 'Amount is required'],
     },
     category:{

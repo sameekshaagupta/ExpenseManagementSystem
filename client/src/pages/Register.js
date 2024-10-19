@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios'
 import {Form, Input, message} from 'antd'
 import { Link,useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import Spinner from '../components/Spinner'
+import { HashLoader } from 'react-spinners'
 const Register = () => {
   const [loading,setLoading] =useState(false)
   const navigate = useNavigate()
@@ -19,10 +19,15 @@ const Register = () => {
       message.error("Something went wrong")
     }
   }
+  useEffect(()=>{
+    if(localStorage.getItem('user')){
+      navigate('/')
+    }
+  },[navigate])
   return (
     <>
         <div className='register-page'>
-          {loading && <Spinner/>}
+          {loading && <HashLoader/>}
             <Form layout='vertical' onFinish={submitHandler}>
               <h3>Registration Form</h3>
               <Form.Item label="Name" name="name">

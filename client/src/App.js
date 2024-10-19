@@ -8,7 +8,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<ProtectedRoutes><HomePage/></ProtectedRoutes>}></Route>
+        <Route path='/' element={
+          <ProtectedRoutes>
+            <HomePage/>
+          </ProtectedRoutes>
+        }/>
         <Route path='/register' element={<Register/>}></Route>
         <Route path='/login' element={<Login/>}></Route>
       </Routes>
@@ -17,9 +21,9 @@ function App() {
 }
 export function ProtectedRoutes(props){
   if(localStorage.getItem('user')){
-    return props.childen
+    return props.children
   }else{
-    return <Navigate to="/login"></Navigate>
+    return <Navigate to="/login"/>
   }
 }
 export default App;

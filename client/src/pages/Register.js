@@ -5,7 +5,7 @@ import { Link,useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import Spinner from '../components/Spinner'
 const Register = () => {
-  const {loading,setLoading} = useState(false)
+  const [loading,setLoading] =useState(false)
   const navigate = useNavigate()
   const submitHandler = async (values) =>{
     try {
@@ -16,7 +16,7 @@ const Register = () => {
       navigate('/login')
     } catch (error) {
       setLoading(false)
-      message.error('Invalid Data')
+      message.error("Something went wrong")
     }
   }
   return (

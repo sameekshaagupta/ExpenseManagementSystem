@@ -3,23 +3,27 @@ const userModel = require('../models/userModel')
 
 const loginController = async (req, res) => {
     try {
-        const { email, password } = req.body
-        const user = await userModel.findOne({ email, password })
+        const { email, password } = req.body;
+        const user = await userModel.findOne({ email, password }); // Consider hashing passwords for security
+
         if (!user) {
-            res.status(404).send('User Not Found')
+            return res.status(404).json({
+                success: false,
+                message: 'User Not Found'
+            });
         }
-        res.send(200).json({
+
+        res.status(200).json({
             success: true,
-            user
+            user,
         });
     } catch (error) {
         res.status(400).json({
             success: false,
-            error
-        })
+            error: error.message // Consider sending a user-friendly error message
+        });
     }
-}
-
+};
 //register calllback
 const registerController = async (req,res) => {
     try {

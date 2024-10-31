@@ -19,15 +19,21 @@
   align-items: center;
   justify-content: space-between;
 }
+.headd{
+  background-color: rgb(29, 27, 27);
+  color: white;
+}
 /*transaction page*/
 .filters{
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 15px 20px;
-  box-shadow: 0 0 3px 0 gray;
+  box-shadow: 0 0 3px 0 rgb(39, 39, 39);
 }
 
 .buttonn{
-  cursor:pointer
+  cursor:pointer;
+  border-radius:10%;
+  background-color: aliceblue;
 }

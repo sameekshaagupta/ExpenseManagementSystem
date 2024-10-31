@@ -21,7 +21,7 @@ const HomePage = () => {
         </div>
         <div className='content'></div>
         <Modal title="Add Transaction" 
-        visible={showModal} 
+        open={showModal} 
         onCancel={()=>setShowModal(false)}
         footer={false}
         >
@@ -58,7 +58,7 @@ const HomePage = () => {
               <Input type='text'/>
             </Form.Item>
             <div className='d-flex justify-content-end'>
-              <button className='buttonn nav-link active'>Save</button>
+              <button className='buttonn nav-link active' type='submit'>{" "}Save</button>
             </div>
           </Form>
         </Modal>

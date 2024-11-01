@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout/Layout'
-import { Form, message, Modal, Select, Table } from 'antd'
+import { DatePicker, Form, message, Modal, Select, Table } from 'antd'
 import Input from 'antd/es/input/Input'
 import axios from 'axios'
 import { HashLoader } from 'react-spinners'
-
+import moment from 'moment'
+const {RangePicker} = DatePicker;
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [loading,setLoading] = useState(false)
   const [allTransaction, setAllTransaction] = useState([])
+  const [frequency, setFrequency] = useState('7')
+  const [selectedDate, setSelectedDate] = useState([])
 
   const columns = [
     {
       title:'Date',
       dataIndex: 'date',
+      render: (text)=><span>{moment(text).format('YYYY-MM-DD')}</span>
     },
     {
       title:'Amount',
@@ -32,22 +36,28 @@ const HomePage = () => {
     },
   ]
 
-  const getAllTransaction = async ()=>{
-    try {
-      const user = JSON.parse(localStorage.getItem('user'))
-      setLoading(true)
-      const res = await axios.post('/transactions/get-transactions', {userid: user._id})
-      setLoading(false);
-      setAllTransaction(res.data)
-      console.log(res.data)
-    } catch (error) {
-      console.log(error)
-      message.error("Issue with transaction")
-    }
-  }
+  
   useEffect(()=>{
+    const getAllTransaction = async ()=>{
+      try {
+        const user = JSON.parse(localStorage.getItem('user'))
+        setLoading(true)
+        const res = await axios.post('/transactions/get-transactions', {
+          userid: user._id,
+          frequency,
+          selectedDate
+        })
+        setLoading(false);
+        setAllTransaction(res.data)
+        console.log(res.data)
+      } catch (error) {
+        console.log(error)
+        message.error("Issue with transaction")
+      }
+    }
     getAllTransaction();
-  },[])
+
+  },[frequency, selectedDate])
   const handleSubmit= async (values)=>{
     try {
       const user = JSON.parse(localStorage.getItem('user'))
@@ -66,7 +76,16 @@ const HomePage = () => {
       {loading && <HashLoader/>}
         <div className="filters">
           <div>
-            range filter
+            <h6>Select Frequency</h6>
+            <Select value={frequency} onChange={(values)=>setFrequency(values)}>
+              <Select.Option value='7'>Last 1 Week</Select.Option>
+              <Select.Option value='30'>Last 1 Month</Select.Option>
+              <Select.Option value='365'>Last 1 Year</Select.Option>
+              <Select.Option value='custom'>Custom</Select.Option>
+            </Select>
+            {frequency === "custom" && <RangePicker value={selectedDate} onChange={(values)=>{
+              setSelectedDate(values)
+            }}/>}
           </div>
           <div>
             <button className='buttonn nav-link active' onClick={()=>setShowModal(true)}>Add New</button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout/Layout'
 import { Form, message, Modal, Select } from 'antd'
 import Input from 'antd/es/input/Input'
@@ -8,6 +8,23 @@ import { HashLoader } from 'react-spinners'
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [loading,setLoading] = useState(false)
+  const [allTransaction, setAllTransaction] = useState([])
+  const getAllTransaction = async ()=>{
+    try {
+      const user = JSON.parse(localStorage.getItem('user'))
+      setLoading(true)
+      const res = await axios.post('/transactions/get-transactions', {userid: user._id})
+      setLoading(false);
+      setAllTransaction(res.data)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+      message.error("Issue with transaction")
+    }
+  }
+  useEffect(()=>{
+    getAllTransaction();
+  },[])
   const handleSubmit= async (values)=>{
     try {
       const user = JSON.parse(localStorage.getItem('user'))

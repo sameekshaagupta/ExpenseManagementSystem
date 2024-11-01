@@ -20,7 +20,7 @@ app.use(cors())
 //routes
 app.use('/api/v1/users', require('./routes/userRoute'))
 
-app.use('api/v1/transactions', require('./routes/transactionRoute'))
+app.use('/api/v1/transactions', require('./routes/transactionRoute'))
 //creation of port
 const PORT = 8080 || process.env.PORT
 

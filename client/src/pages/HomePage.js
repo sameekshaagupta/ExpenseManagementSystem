@@ -1,16 +1,29 @@
 import React, { useState } from 'react'
 import Layout from '../components/layout/Layout'
-import { Form, Modal, Select } from 'antd'
+import { Form, message, Modal, Select } from 'antd'
 import Input from 'antd/es/input/Input'
-import { Option } from 'antd/es/mentions'
+import axios from 'axios'
+import { HashLoader } from 'react-spinners'
 
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
-  const handleSubmit=(values)=>{
-    console.log(values);
+  const [loading,setLoading] = useState(false)
+  const handleSubmit= async (values)=>{
+    try {
+      const user = JSON.parse(localStorage.getItem('user'))
+      setLoading(true)
+      await axios.post('/transactions/add-transactions',  {...values, userid:user._id})
+      setLoading(false)
+      message.success("Transaction Added")
+      setShowModal(false)
+    } catch (error) {
+      setLoading(false)
+      message.error("Failed to add transaction")
+    }
   }
   return (
     <Layout>
+      {loading && <HashLoader/>}
         <div className="filters">
           <div>
             range filter

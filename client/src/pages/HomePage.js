@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout/Layout'
-import { Form, message, Modal, Select } from 'antd'
+import { Form, message, Modal, Select, Table } from 'antd'
 import Input from 'antd/es/input/Input'
 import axios from 'axios'
 import { HashLoader } from 'react-spinners'
@@ -9,6 +9,29 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [loading,setLoading] = useState(false)
   const [allTransaction, setAllTransaction] = useState([])
+
+  const columns = [
+    {
+      title:'Date',
+      dataIndex: 'date',
+    },
+    {
+      title:'Amount',
+      dataIndex: 'amount',
+    },
+    {
+      title:'Category',
+      dataIndex: 'category',
+    },
+    {
+      title:'Reference',
+      dataIndex: 'reference',
+    },
+    {
+      title:'Actions',
+    },
+  ]
+
   const getAllTransaction = async ()=>{
     try {
       const user = JSON.parse(localStorage.getItem('user'))
@@ -49,7 +72,9 @@ const HomePage = () => {
             <button className='buttonn nav-link active' onClick={()=>setShowModal(true)}>Add New</button>
           </div>
         </div>
-        <div className='content'></div>
+        <div className='content'>
+          <Table columns={columns} dataSource={allTransaction}/>
+        </div>
         <Modal title="Add Transaction" 
         open={showModal} 
         onCancel={()=>setShowModal(false)}

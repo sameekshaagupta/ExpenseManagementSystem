@@ -12,7 +12,7 @@ const HomePage = () => {
   const [allTransaction, setAllTransaction] = useState([])
   const [frequency, setFrequency] = useState('7')
   const [selectedDate, setSelectedDate] = useState([])
-
+  const [type, setType] = useState('all')
   const columns = [
     {
       title:'Date',
@@ -45,7 +45,8 @@ const HomePage = () => {
         const res = await axios.post('/transactions/get-transactions', {
           userid: user._id,
           frequency,
-          selectedDate
+          selectedDate,
+          type
         })
         setLoading(false);
         setAllTransaction(res.data)
@@ -57,7 +58,7 @@ const HomePage = () => {
     }
     getAllTransaction();
 
-  },[frequency, selectedDate])
+  },[frequency, selectedDate, type])
   const handleSubmit= async (values)=>{
     try {
       const user = JSON.parse(localStorage.getItem('user'))
@@ -82,6 +83,17 @@ const HomePage = () => {
               <Select.Option value='30'>Last 1 Month</Select.Option>
               <Select.Option value='365'>Last 1 Year</Select.Option>
               <Select.Option value='custom'>Custom</Select.Option>
+            </Select>
+            {frequency === "custom" && <RangePicker value={selectedDate} onChange={(values)=>{
+              setSelectedDate(values)
+            }}/>}
+          </div>
+          <div>
+            <h6>Select Type</h6>
+            <Select value={type} onChange={(values)=>setType(values)}>
+              <Select.Option value='all'>All Type</Select.Option>
+              <Select.Option value='income'>Income</Select.Option>
+              <Select.Option value='expense'>Expense</Select.Option>
             </Select>
             {frequency === "custom" && <RangePicker value={selectedDate} onChange={(values)=>{
               setSelectedDate(values)

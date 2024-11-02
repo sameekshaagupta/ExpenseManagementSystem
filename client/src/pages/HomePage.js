@@ -5,7 +5,7 @@ import Input from 'antd/es/input/Input'
 import axios from 'axios'
 import { HashLoader } from 'react-spinners'
 import moment from 'moment'
-import {UnorderedListOutlined,AreaChartOutlined} from '@ant-design/icons'
+import {UnorderedListOutlined,AreaChartOutlined, EditOutlined, DeleteOutlined} from '@ant-design/icons'
 import Analytics from '../components/Analytics'
 const {RangePicker} = DatePicker;
 
@@ -17,6 +17,7 @@ const HomePage = () => {
   const [selectedDate, setSelectedDate] = useState([])
   const [type, setType] = useState('all')
   const [viewData, setviewData] = useState('table')
+  const [editable, setEditable] = useState(null)
   const columns = [
     {
       title:'Date',
@@ -37,6 +38,15 @@ const HomePage = () => {
     },
     {
       title:'Actions',
+      render: (text, record) => (
+        <div>
+          <EditOutlined onClick={()=>{
+            setEditable(record)
+            setShowModal(true)
+          }}/>
+          <DeleteOutlined className='mx-2'/>
+        </div>
+      )
     },
   ]
 
@@ -67,10 +77,24 @@ const HomePage = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'))
       setLoading(true)
-      await axios.post('/transactions/add-transactions',  {...values, userid:user._id})
-      setLoading(false)
-      message.success("Transaction Added")
+      if(editable){
+        await axios.post('/transactions/edit-transactions',  {
+          payload:{
+            ...values,
+            userId:user._id,
+            transactionId: editable._id
+          }
+        })
+        setLoading(false)
+        message.success("Transaction Edited Successfully")
+      }else{
+        await axios.post('/transactions/add-transactions',  {...values, userid:user._id})
+        setLoading(false)
+        message.success("Transaction Added Successfully")
+      }
+
       setShowModal(false)
+      setEditable(null)
     } catch (error) {
       setLoading(false)
       message.error("Failed to add transaction")
@@ -120,12 +144,12 @@ const HomePage = () => {
           <Analytics allTransaction={allTransaction }/>
           )}
         </div>
-        <Modal title="Add Transaction" 
+        <Modal title={editable ? "Edit Transaction":"Add Transaction"} 
         open={showModal} 
         onCancel={()=>setShowModal(false)}
         footer={false}
         >
-          <Form layout='vertical' onFinish={handleSubmit}>
+          <Form layout='vertical' onFinish={handleSubmit} initialValues={editable}>
             <Form.Item label='Amount' name='amount' >
               <Input type='text'/>
             </Form.Item>

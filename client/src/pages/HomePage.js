@@ -6,6 +6,7 @@ import axios from 'axios'
 import { HashLoader } from 'react-spinners'
 import moment from 'moment'
 import {UnorderedListOutlined,AreaChartOutlined} from '@ant-design/icons'
+import Analytics from '../components/Analytics'
 const {RangePicker} = DatePicker;
 
 const HomePage = () => {
@@ -113,7 +114,11 @@ const HomePage = () => {
           </div>
         </div>
         <div className='content'>
-          <Table columns={columns} dataSource={allTransaction}/>
+          {viewData==='table'?(
+          <Table columns={columns} dataSource={allTransaction}/>)
+          :(
+          <Analytics allTransaction={allTransaction }/>
+          )}
         </div>
         <Modal title="Add Transaction" 
         open={showModal} 

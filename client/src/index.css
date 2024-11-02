@@ -37,3 +37,20 @@
   border-radius:10%;
   background-color: aliceblue;
 }
+
+.anticon svg{
+  font-size: 20px;
+  cursor:pointer;
+}
+.active-icon{
+  color: black
+}
+.inactive-icon{
+  color: gray;
+}
+
+.switchicon{
+  border:1px solid  black ;
+  border-radius: 5px;
+  padding: 10px 15px;
+}

@@ -5,7 +5,9 @@ import Input from 'antd/es/input/Input'
 import axios from 'axios'
 import { HashLoader } from 'react-spinners'
 import moment from 'moment'
+import {UnorderedListOutlined,AreaChartOutlined} from '@ant-design/icons'
 const {RangePicker} = DatePicker;
+
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false)
   const [loading,setLoading] = useState(false)
@@ -13,6 +15,7 @@ const HomePage = () => {
   const [frequency, setFrequency] = useState('7')
   const [selectedDate, setSelectedDate] = useState([])
   const [type, setType] = useState('all')
+  const [viewData, setviewData] = useState('table')
   const columns = [
     {
       title:'Date',
@@ -99,6 +102,12 @@ const HomePage = () => {
               setSelectedDate(values)
             }}/>}
           </div>
+          <div className='switchicon'>
+              <div>
+              <UnorderedListOutlined className={`mx-2 ${viewData==='table' ? 'active-icon':'inactive-icon'}`} onClick={()=> setviewData('table')}/>
+                <AreaChartOutlined className={`mx-2 ${viewData==='analytics' ? 'active-icon':'inactive-icon'}`} onClick={()=> setviewData('analytics')}/>
+              </div>
+            </div>
           <div>
             <button className='buttonn nav-link active' onClick={()=>setShowModal(true)}>Add New</button>
           </div>

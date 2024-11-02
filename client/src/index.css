@@ -5,7 +5,7 @@
 }
 
 .content{
-  height: 80vh;
+  height: 100vh;
 }
 
 .register-page{
@@ -22,14 +22,16 @@
 .headd{
   background-color: rgb(29, 27, 27);
   color: white;
+  font-size: medium;
 }
+
 /*transaction page*/
 .filters{
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 15px 20px;
-  box-shadow: 0 0 3px 0 rgb(39, 39, 39);
+  box-shadow: 0 0 3px  rgb(39, 39, 39);
 }
 
 .buttonn{

@@ -3,7 +3,7 @@ import {Link, useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { HashLoader } from 'react-spinners';
-
+import "../styles/LoginPage.css"
 const Login = () => {
   const [loading,setLoading] = useState(false);
   const navigate = useNavigate();

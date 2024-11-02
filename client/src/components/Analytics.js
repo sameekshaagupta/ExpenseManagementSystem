@@ -18,7 +18,7 @@ const Analytics = ({ allTransaction }) => {
   return (
     <>
         <div className='row m-3'>
-            <div className='col-md-4'z>
+            <div className='col-md-4'>
                 <div className='card'>
                     <div className='card-header'>
                         Total Transactions: {totalTransaction}
@@ -26,22 +26,22 @@ const Analytics = ({ allTransaction }) => {
                     <div className='card-body'>
                         <h5 className='text-success'>Total Income Transaction: {totalIncomeTransaction.length}</h5>
                         <h5 className='text-danger'>Total Expense Transaction: {totalExpenseTransaction.length}</h5>
+                        <div>
+                            <Progress type='circle' 
+                            strokeColor={'green'} 
+                            className='mx-2' 
+                            percent={totalIncomePercent.toFixed(0)}
+                            />
+                            <Progress type='circle' 
+                            strokeColor={'red'} 
+                            className='mx-2' 
+                            percent={totalExpensePercent.toFixed(0)}
+                            />
                     </div>
-                    <div>
-                        <Progress type='circle' 
-                        strokeColor={'green'} 
-                        className='mx-2' 
-                        percent={totalIncomePercent.toFixed(0)}
-                        />
-                        <Progress type='circle' 
-                        strokeColor={'red'} 
-                        className='mx-2' 
-                        percent={totalExpensePercent.toFixed(0)}
-                        />
                     </div>
                 </div>
             </div>
-            <div className='col-md-4'z>
+            <div className='col-md-4'>
                 <div className='card'>
                     <div className='card-header'>
                         Total Turnover: {totalTurnover}
@@ -49,18 +49,18 @@ const Analytics = ({ allTransaction }) => {
                     <div className='card-body'>
                         <h5 className='text-success'>Total Income TurnOver: {totalIncomeTurnover}</h5>
                         <h5 className='text-danger'>Total Expense TurnOver: {totalExpenseTurnover}</h5>
-                    </div>
-                    <div>
-                        <Progress type='circle' 
-                        strokeColor={'green'} 
-                        className='mx-2' 
-                        percent={totalIncomeTurnoverPercent.toFixed(0)}
-                        />
-                        <Progress type='circle' 
-                        strokeColor={'red'} 
-                        className='mx-2' 
-                        percent={totalExpenseTurnoverPercent.toFixed(0)}
-                        />
+                        <div>
+                            <Progress type='circle' 
+                            strokeColor={'green'} 
+                            className='mx-2' 
+                            percent={totalIncomeTurnoverPercent.toFixed(0)}
+                            />
+                            <Progress type='circle' 
+                            strokeColor={'red'} 
+                            className='mx-2' 
+                            percent={totalExpenseTurnoverPercent.toFixed(0)}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

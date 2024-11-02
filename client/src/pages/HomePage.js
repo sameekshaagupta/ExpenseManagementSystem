@@ -44,7 +44,7 @@ const HomePage = () => {
             setEditable(record)
             setShowModal(true)
           }}/>
-          <DeleteOutlined className='mx-2'/>
+          <DeleteOutlined className='mx-2' onClick={()=>{handleDelete(record)}}/>
         </div>
       )
     },
@@ -73,6 +73,19 @@ const HomePage = () => {
     getAllTransaction();
 
   },[frequency, selectedDate, type])
+
+  const handleDelete = async (record) => {
+    try {
+      setLoading(true)
+      await axios.post('/transactions/delete-transactions', {transactionId: record._id})
+      setLoading(false)
+      message.success("Transaction Deleted Successfully")
+    } catch (error) {
+      setLoading(false)
+      message.error("Failed to delete transaction")
+    }
+
+  }
   const handleSubmit= async (values)=>{
     try {
       const user = JSON.parse(localStorage.getItem('user'))
@@ -82,8 +95,8 @@ const HomePage = () => {
           payload:{
             ...values,
             userId:user._id,
-            transactionId: editable._id
-          }
+          },
+          transactionId: editable._id
         })
         setLoading(false)
         message.success("Transaction Edited Successfully")

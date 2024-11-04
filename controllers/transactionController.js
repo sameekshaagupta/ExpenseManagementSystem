@@ -54,3 +54,5 @@ const editTransaction = async (req,res)=>{
 }
 
 module.exports = {getAllTransaction, addTransaction, editTransaction, deleteTransaction}
+
+//objective, to study the particular sw (2 or 3) //delieverables //outcome

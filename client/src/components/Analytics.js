@@ -18,6 +18,7 @@ const Analytics = ({ allTransaction }) => {
     const totalExpenseTurnover = allTransaction.filter((transaction) => transaction.type === 'expense').reduce((acc, transaction) => acc + transaction.amount, 0)
     const totalIncomeTurnoverPercent = (totalIncomeTurnover / totalTurnover) * 100
     const totalExpenseTurnoverPercent = (totalExpenseTurnover / totalTurnover) * 100
+    const savings = totalIncomeTurnover - totalExpenseTurnover;
     return (
         <>
             <div className='row m-3'>
@@ -31,7 +32,7 @@ const Analytics = ({ allTransaction }) => {
                             <h5 className='text-danger'>Total Expense Transaction: {totalExpenseTransaction.length}</h5>
                             <div>
                                 <Progress type='circle'
-                                    strokeColor={'green'}
+                                    strokeColor={'blue'}
                                     className='mx-2'
                                     percent={totalIncomePercent.toFixed(0)}
                                 />
@@ -47,7 +48,8 @@ const Analytics = ({ allTransaction }) => {
                 <div className='col-md-5'>
                     <div className='card'>
                         <div className='card-header'>
-                            Total Savings: {totalTurnover-totalExpenseTurnover}
+                            Total TurnOver: {totalTurnover}<br/>
+                            Total Savings: {savings}
                         </div>
                         <div className='card-body'>
                             <h5 className='text-success'>Total Income Amount: {totalIncomeTurnover}</h5>

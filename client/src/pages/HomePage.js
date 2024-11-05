@@ -76,47 +76,83 @@ const HomePage = () => {
 
   const handleDelete = async (record) => {
     try {
-      setLoading(true)
-      await axios.post('/transactions/delete-transactions', {transactionId: record._id})
-      setLoading(false)
-      message.success("Transaction Deleted Successfully")
+        setLoading(true);
+        await axios.post('/transactions/delete-transactions', { transactionId: record._id });
+        
+        // Update the state to remove the deleted transaction
+        setAllTransaction(allTransaction.filter(item => item._id !== record._id));
+
+        setLoading(false);
+        message.success("Transaction Deleted Successfully");
     } catch (error) {
-      setLoading(false)
-      message.error("Failed to delete transaction")
+        setLoading(false);
+        message.error("Failed to delete transaction");
+    }
+}
+const fetchTransactions = async () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  try {
+    const res = await axios.post('/transactions/get-transactions', {
+      userid: user._id,
+      frequency,
+      selectedDate,
+      type
+    });
+    setAllTransaction(res.data);
+  } catch (error) {
+    console.error(error);
+    message.error("Issue with fetching transactions");
+  }
+};
+
+const handleSubmit = async (values) => {
+  setLoading(true); // Start loading state
+  try {
+    const user = JSON.parse(localStorage.getItem('user'));
+    let transaction;
+
+    if (editable) {
+      const response = await axios.post('/transactions/edit-transactions', {
+        payload: {
+          ...values,
+          userId: user._id,
+        },
+        transactionId: editable._id,
+      });
+      transaction = response.data;
+      message.success("Transaction Edited Successfully");
+    } else {
+      const response = await axios.post('/transactions/add-transactions', {
+        ...values,
+        userid: user._id,
+      });
+      transaction = response.data;
+      message.success("Transaction Added Successfully");
     }
 
-  }
-  const handleSubmit= async (values)=>{
-    try {
-      const user = JSON.parse(localStorage.getItem('user'))
-      setLoading(true)
-      if(editable){
-        await axios.post('/transactions/edit-transactions',  {
-          payload:{
-            ...values,
-            userId:user._id,
-          },
-          transactionId: editable._id
-        })
-        setLoading(false)
-        message.success("Transaction Edited Successfully")
-      }else{
-        await axios.post('/transactions/add-transactions',  {...values, userid:user._id})
-        setLoading(false)
-        message.success("Transaction Added Successfully")
-      }
+    // Fetch updated transactions
+    await fetchTransactions(); // This will ensure the table updates with the latest data
 
-      setShowModal(false)
-      setEditable(null)
-    } catch (error) {
-      setLoading(false)
-      message.error("Failed to add transaction")
-    }
+    setShowModal(false);
+    setEditable(null);
+  } catch (error) {
+    console.error("Error adding/editing transaction:", error);
+    message.error("Failed to add transaction");
+  } finally {
+    setLoading(false); // End loading state
   }
+};
+
+
+
   return (
     <Layout>
-      {loading && <HashLoader/>}
-        <div className="filters">
+      {loading && (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <HashLoader />
+      </div>
+    )}
+        <div className="filters m-3">
           <div>
             <h6>Select Frequency</h6>
             <Select value={frequency} onChange={(values)=>setFrequency(values)}>
@@ -142,7 +178,7 @@ const HomePage = () => {
           </div>
           <div className='switchicon'>
               <div>
-              <UnorderedListOutlined className={`mx-2 ${viewData==='table' ? 'active-icon':'inactive-icon'}`} onClick={()=> setviewData('table')}/>
+                <UnorderedListOutlined className={`mx-2 ${viewData==='table' ? 'active-icon':'inactive-icon'}`} onClick={()=> setviewData('table')}/>
                 <AreaChartOutlined className={`mx-2 ${viewData==='analytics' ? 'active-icon':'inactive-icon'}`} onClick={()=> setviewData('analytics')}/>
               </div>
             </div>
@@ -150,55 +186,67 @@ const HomePage = () => {
             <button className='buttonn nav-link active' onClick={()=>setShowModal(true)}>Add New</button>
           </div>
         </div>
-        <div className='content'>
+        <div className='content m-5'>
           {viewData==='table'?(
           <Table columns={columns} dataSource={allTransaction}/>)
           :(
           <Analytics allTransaction={allTransaction }/>
           )}
         </div>
-        <Modal title={editable ? "Edit Transaction":"Add Transaction"} 
-        open={showModal} 
-        onCancel={()=>setShowModal(false)}
-        footer={false}
+        <Modal
+          title={editable ? "Edit Transaction" : "Add Transaction"}
+          open={showModal}
+          onCancel={() => {
+            setShowModal(false);
+            setEditable(null); // Reset editable on modal close
+          }}
+          footer={false}
         >
-          <Form layout='vertical' onFinish={handleSubmit} initialValues={editable}>
-            <Form.Item label='Amount' name='amount' >
-              <Input type='text'/>
+          <Form
+            layout="vertical"
+            onFinish={handleSubmit}
+            initialValues={editable || {}} // Set initialValues to editable or an empty object for "Add" mode
+            key={editable ? editable._id : 'new'} // Add key to force rerender when editable changes
+          >
+            <Form.Item label="Amount" name="amount">
+              <Input type="text" />
             </Form.Item>
-            <Form.Item label='Type' name='type'>
+            <Form.Item label="Type" name="type">
               <Select>
-                <Select.Option value='income'>Income</Select.Option>
-                <Select.Option value='expense'>Expense</Select.Option>
+                <Select.Option value="income">Income</Select.Option>
+                <Select.Option value="expense">Expense</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item label='Category' name='category'>
+            <Form.Item label="Category" name="category">
               <Select>
-                <Select.Option value='salary'>Salary</Select.Option>
-                <Select.Option value='tip'>Tip</Select.Option>
-                <Select.Option value='food'>Food</Select.Option>
-                <Select.Option value='movie'>Movie</Select.Option>
-                <Select.Option value='bills'>Bills</Select.Option>
-                <Select.Option value='rent'>Rent</Select.Option>
-                <Select.Option value='medical'>Medical</Select.Option>
-                <Select.Option value='fee'>Fees</Select.Option>
-                <Select.Option value='other'>Other</Select.Option>
+                <Select.Option value="salary">Salary</Select.Option>
+                <Select.Option value="tip">Tip</Select.Option>
+                <Select.Option value="food">Food</Select.Option>
+                <Select.Option value="movie">Movie</Select.Option>
+                <Select.Option value="bills">Bills</Select.Option>
+                <Select.Option value="rent">Rent</Select.Option>
+                <Select.Option value="medical">Medical</Select.Option>
+                <Select.Option value="fee">Fees</Select.Option>
+                <Select.Option value="other">Other</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item label='Date' name='date' >
-              <Input type='date'/>
+            <Form.Item label="Date" name="date">
+              <Input type="date" />
             </Form.Item>
-            <Form.Item label='Reference' name='reference' >
-              <Input type='text'/>
+            <Form.Item label="Reference" name="reference">
+              <Input type="text" />
             </Form.Item>
-            <Form.Item label='Description' name='description' >
-              <Input type='text'/>
+            <Form.Item label="Description" name="description">
+              <Input type="text" />
             </Form.Item>
-            <div className='d-flex justify-content-end'>
-              <button className='buttonn nav-link active' type='submit'>{" "}Save</button>
+            <div className="d-flex justify-content-end">
+              <button className="buttonn nav-link active" type="submit">
+                {" "}Save
+              </button>
             </div>
           </Form>
         </Modal>
+
     </Layout>
   )
 }

@@ -4,13 +4,14 @@ const userModel = require('../models/userModel')
 const loginController = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await userModel.findOne({ email, password }); // Consider hashing passwords for security
+        const user = await userModel.findOne({ email });
 
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User Not Found'
-            });
+            return res.status(404).send("User Not Found");
+        }
+
+        if (user.password !== password) {
+            return res.status(401).send("Invalid credentials");
         }
 
         res.status(200).json({
@@ -20,7 +21,7 @@ const loginController = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            error: error.message // Consider sending a user-friendly error message
+            error: error.message,
         });
     }
 };
@@ -36,7 +37,7 @@ const registerController = async (req,res) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            error
+            error:error.message
         })
     }
 }

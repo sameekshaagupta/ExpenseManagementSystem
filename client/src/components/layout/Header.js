@@ -2,6 +2,8 @@ import { message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import "../../styles/HeaderStyles.css";
+import { UserOutlined } from '@ant-design/icons';
+
 const Header = () => {
     const navigate = useNavigate()
     const [loginUser,setLoginUser]=useState('')
@@ -25,10 +27,13 @@ const Header = () => {
                         <span className="navbar-toggler-icon" />
                     </button>
                     <div className="collapse navbar-collapse head" id="navbarTogglerDemo01">
-                        <Link className="navbar-brand text-white" to="/">Expensense Management</Link>
+                        <Link className="navbar-brand text-white" to="/">Expense Management</Link>
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0  d-flex flex-end">
+                            <li className='nav-item pt-3 pr-1' >
+                                <UserOutlined/>
+                            </li>
                             <li className="nav-item">
-                                <p className="nav-link">
+                                <p className="nav-link pt-2 pr-3">
                                     {loginUser && loginUser.name}   
                                 </p>                         
                             </li>

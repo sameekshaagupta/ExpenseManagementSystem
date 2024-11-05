@@ -4,11 +4,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
   .login-form {
-    background-color: #b9bcccb6;
+    background-color: #f7f7fa26;
+    
     margin-left: -15px;
     padding: 30px;
   }
@@ -22,9 +22,9 @@
   
   .login-form .ant-form-item-label label {
     color: #344265 !important;
-  }
+    }
   .login-form button {
-    background-color: #344265;
+    background-color: #00113d;
     color: white;
     outline: none;
   }
@@ -38,4 +38,9 @@
   
   .login-form a:hover {
     color: black !important;
+  }
+  .hehe{
+    border: 1px solid black;
+    padding: 40px;
+    background: #eef6ee4d;
   }

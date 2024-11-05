@@ -21,7 +21,7 @@ const Analytics = ({ allTransaction }) => {
     return (
         <>
             <div className='row m-3'>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     <div className='card'>
                         <div className='card-header'>
                             Total Transactions: {totalTransaction}
@@ -44,14 +44,14 @@ const Analytics = ({ allTransaction }) => {
                         </div>
                     </div>
                 </div>
-                <div className='col-md-4'>
+                <div className='col-md-5'>
                     <div className='card'>
                         <div className='card-header'>
-                            Total Turnover: {totalTurnover}
+                            Total Savings: {totalTurnover-totalExpenseTurnover}
                         </div>
                         <div className='card-body'>
-                            <h5 className='text-success'>Total Income TurnOver: {totalIncomeTurnover}</h5>
-                            <h5 className='text-danger'>Total Expense TurnOver: {totalExpenseTurnover}</h5>
+                            <h5 className='text-success'>Total Income Amount: {totalIncomeTurnover}</h5>
+                            <h5 className='text-danger'>Total Expense Amount: {totalExpenseTurnover}</h5>
                             <div>
                                 <Progress type='circle'
                                     strokeColor={'green'}
@@ -68,7 +68,7 @@ const Analytics = ({ allTransaction }) => {
                     </div>
                 </div>
             </div>
-            <div className='row mt-3'>
+            <div className='row mt-3 m-3'>
                 <div className='col-md-5'>
                     <h4>Categorywise Income</h4>
                     {
@@ -87,7 +87,7 @@ const Analytics = ({ allTransaction }) => {
                         })
                     }
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-5">
           <h4>Categorywise Expense</h4>
           {categories.map((category) => {
             const amount = allTransaction

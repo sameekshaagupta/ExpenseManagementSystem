@@ -29,6 +29,12 @@ app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
+//static file
+app.use(express.static(path.join(__dirname, './client/build')))
+
+app.get('*', function(req,res){
+  res.sendFile(path.join(__dirname, "./client/build/index.html"))
+})
 //creation of port
 const PORT = 8080 || process.env.PORT
 
